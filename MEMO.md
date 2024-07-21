@@ -27,3 +27,17 @@
 - INCRBY [key] [param] :: value + param
 - DECRBY [key] [param] :: value + param
 - INCRBYFLOAT [key] [float param] :: value - float param
+
+#### 해쉬
+
+- HSET [key] [keyOfValue] [value] [keyOfValue] [value] ... :: return 업데이트 된 key count
+- HGET [key] [keyOfValue]
+- HGETALL [key] :: return [[key],[value],[key],[value]...]
+- HEXISTS [key] [keyOfValue] :: keyOfValue가 있으면 return 1 아닐 경우 return 0
+- DEL [key] :: 해쉬값을 삭제
+- HDEL [key] [keyOfValue] :: keyOfValue에 해당하는 k,v를 삭제
+- HINCRBY [key] [keyOfValue] [IncryValue] :: IncryValue 만큼 증가
+- HINCRBYFLOAT [key] [keyOfValue] [IncryValue]
+- HSTRLEN [key] [keyOFValue] :: 문자열 길이
+- HKEYS [key] :: 해쉬값의 key들 return
+- HVALS [key] :: 해쉬값의 value들 return
