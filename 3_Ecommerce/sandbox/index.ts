@@ -2,19 +2,23 @@ import 'dotenv/config';
 import { client } from '../src/services/redis';
 
 const run = async () => {
-	// redis에서 hashSet에 null 이나 undiefined는 대입 할 수 없다.
-	// value가 object 일 경우 object.ToString()이 되므로 원치않는 값이 대입된다.
-	await client.hSet('car', {
+	await client.hSet('car1', {
 		color: 'red',
 		year: 1950
 	});
+	await client.hSet('car2', {
+		color: 'green',
+		year: 1955
+	});
+	await client.hSet('car3', {
+		color: 'blue',
+		year: 1960
+	});
 
-	const car = await client.hGetAll('car');
+	const commands = [1, 2, 3].map((id) => {
+		return client.hGetAll('car' + id);
+	});
 
-	if (Object.keys(car).length === 0) {
-		console.log('Car Not Exist');
-		return;
-	}
-	console.log(car);
+	const result = await Promise.all(commands);
 };
 run();
