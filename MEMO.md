@@ -41,3 +41,17 @@
 - HSTRLEN [key] [keyOFValue] :: 문자열 길이
 - HKEYS [key] :: 해쉬값의 key들 return
 - HVALS [key] :: 해쉬값의 value들 return
+
+#### SET
+
+- SADD [key] [value] [value] ... :: 성공하면 1 실패시 0
+- SMEMBERS [key] :: 모든 값 array로 리턴
+- SUNION [key] [key] [key] ... :: 유니온 된 array 리턴
+- SINTER [key] [key] [key] ... :: 교집합 리턴
+- SDIFF [baseKey] [key] [key] ... :: baseKey에 해당하는 것 중 겹치는게 없는 걸 리턴
+- SINTERSTORE [storeKey] [key] [key] ... :: key들의 교집합음 storeKey에 할당
+- SISMEMBER [key] [value] :: value가 있으면 1 없으면 0
+- SMISMEMBER [key] [value] [value] [value] ... :: value가 있으면 1 없으면 0 return array
+- SCARD [key] :: return length
+- SREM [key] [value] :: remove value
+- SSCAN [key] [cursorID] COUNT [count] :: cussorID 부터 count 만큼 가져온다. 리턴 값에 다음 sucsorID를 리턴함
