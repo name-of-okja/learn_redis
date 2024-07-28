@@ -55,3 +55,19 @@
 - SCARD [key] :: return length
 - SREM [key] [value] :: remove value
 - SSCAN [key] [cursorID] COUNT [count] :: cussorID 부터 count 만큼 가져온다. 리턴 값에 다음 sucsorID를 리턴함
+
+### Sorted SET
+
+- ZADD [key] [score] [member] :: member에 score값을 매겨서 저장
+- ZSCORE [key] [member] :: key->member 에 해당하는 score 값 리턴
+- ZREM [key] [member] :: member 삭제
+- ZCARD [key] :: return length
+- ZCOUNT [key] [min] [max] :: scroe가 min >= max <= 인 갯수 리턴 :: ([min] ([max] 시 min 이랑 max 포함하지 않음
+  <br>:: -inf +inf 로 제일 작은 값 제일 큰 값으로 설정 가능
+- ZPOPMIN [key] [count] :: 제일 작은 스코어를 가진 count만큼의 값 return
+- ZPOPMAX [key] [count] :: 제일 큰 스코어를 가진 count만큼의 값 return
+- ZINCRBY [key] [score] [member] :: member의 score에 [score] 만큼 증가
+- ZRANGE [key] [minIdx] [maxIdx] ?WITHSCORES :: [key]에 해당하는 idx 범위 가져오기 :: 오름차순으로 정렬 된 상태에서 idx임
+- ZRANGE [key] [minScore] [maxScore] BYSCORE ?WITHSCORES :: [key]에 해당하는 member중 score가 min max 범위 안에 있는 member 목록 가져오기
+- ZRANGE [key] [minIdx] [maxIdx] REV :: [key]에 해당하는 idx 범위 가져오기 :: 내림차순으로 정렬 된 상태에서 idx임
+- ZRANGE [key] [minScore] [maxScore] BYSCORE LIMIT [offset] [count] :: [key]에 해당하는 member중 score가 min max 범위 안에 있는 member 목록 가져오기 :: [offset] 만큼 건너뛰고 [count] 만큼 가져오기
