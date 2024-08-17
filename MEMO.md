@@ -71,3 +71,35 @@
 - ZRANGE [key] [minScore] [maxScore] BYSCORE ?WITHSCORES :: [key]에 해당하는 member중 score가 min max 범위 안에 있는 member 목록 가져오기
 - ZRANGE [key] [minIdx] [maxIdx] REV :: [key]에 해당하는 idx 범위 가져오기 :: 내림차순으로 정렬 된 상태에서 idx임
 - ZRANGE [key] [minScore] [maxScore] BYSCORE LIMIT [offset] [count] :: [key]에 해당하는 member중 score가 min max 범위 안에 있는 member 목록 가져오기 :: [offset] 만큼 건너뛰고 [count] 만큼 가져오기
+
+### SORT
+
+> Sorted Set
+
+- SORT [key] => Error :: sort 함수에서는 member 자체가 score가 되므로 문자열을 숫자로 변경이 불가능하여 오류가 발생 중요한건 맴버자체가 score
+- SORT [key] ALPHA :: 문자열을 알파벳 순서로 Sort함
+- SORT [key] LIMIT [offset] [count] ALPHA :: [offset] 만큼 건너띄고 [count] 만큼 가져옴
+- SORT books:likes BY books:\* -> year :: ['bad', 'ok', 'good'] :: \*에 SortedSet의 맴버를 바인딩해서 검색 한 해쉬의 year로 정렬한다
+- SORT books:likes BY books:\* -> year GET books:\*->title :: ['Bad Book', 'OK book', 'Good Book']
+- SORT books:likes BY [nosort] [DESC|ASC] GET # :: 정렬을 안해도 된다. 사용이유는 그냥 데이터 조인만 하고 시을 경우
+
+> 테스트 데이터 Hash : Sorted Set
+
+| key        | ID   | Title     | Year | -   | key         | Member(Hash ID) | Score(Likes) |
+| ---------- | ---- | --------- | ---- | --- | ----------- | --------------- | ------------ |
+| books:good | good | Good Book | 1950 | -   | books:likes | good            | 999          |
+| books:bad  | bad  | Bad Book  | 1930 | -   | books:likes | bad             | 0            |
+| books:ok   | ok   | OK Book   | 1940 | -   | books:likes | ok              | 40           |
+
+▼ ▼ ▼ ▼ ▼ ▼ ▼ ▼ ▼ ▼ ▼ ▼ ▼ ▼ ▼ ▼
+
+> SORT books:likes BY books:\*-> year <br>
+> GET # <br>
+> GET books:\*->title <br>
+> GET books:\* ->year <br>
+
+| ID   | Title     | Year |
+| ---- | --------- | ---- |
+| bad  | Bad Book  | 1930 |
+| ok   | OK Book   | 1940 |
+| good | Good Book | 1950 |
