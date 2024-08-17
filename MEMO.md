@@ -1,6 +1,16 @@
-## Default
+## Redis
 
-#### 문자열
+- [String](#string)
+- [Number](#number)
+- [Hash](#hash)
+- [SET](#set)
+- [Sorted Set](#sorted-set)
+- [Sort](#sort)
+- [HyperLogLog](#hyperloglog)
+
+---
+
+#### String
 
 - SET [key] [value] => "OK"
 - GET [key] => [value]
@@ -20,7 +30,9 @@
 - GETRANGE [key] [start] [end] :: value에 substring :: 신기한건 end 인덱스까지 포함해서 리턴
 - SETRANGE [key] [index] [value] :: key에 해당하는 값에 인덱스부터 value로 덮어씀 :: 리턴 값은 length
 
-#### 숫자
+---
+
+#### Number
 
 - INCR [key] :: value + 1;
 - DECR [key] :: value - 1
@@ -28,7 +40,9 @@
 - DECRBY [key] [param] :: value + param
 - INCRBYFLOAT [key] [float param] :: value - float param
 
-#### 해쉬
+---
+
+#### Hash
 
 - HSET [key] [keyOfValue] [value] [keyOfValue] [value] ... :: return 업데이트 된 key count
 - HGET [key] [keyOfValue]
@@ -41,6 +55,8 @@
 - HSTRLEN [key] [keyOFValue] :: 문자열 길이
 - HKEYS [key] :: 해쉬값의 key들 return
 - HVALS [key] :: 해쉬값의 value들 return
+
+---
 
 #### SET
 
@@ -55,6 +71,8 @@
 - SCARD [key] :: return length
 - SREM [key] [value] :: remove value
 - SSCAN [key] [cursorID] COUNT [count] :: cussorID 부터 count 만큼 가져온다. 리턴 값에 다음 sucsorID를 리턴함
+
+---
 
 ### Sorted SET
 
@@ -71,6 +89,8 @@
 - ZRANGE [key] [minScore] [maxScore] BYSCORE ?WITHSCORES :: [key]에 해당하는 member중 score가 min max 범위 안에 있는 member 목록 가져오기
 - ZRANGE [key] [minIdx] [maxIdx] REV :: [key]에 해당하는 idx 범위 가져오기 :: 내림차순으로 정렬 된 상태에서 idx임
 - ZRANGE [key] [minScore] [maxScore] BYSCORE LIMIT [offset] [count] :: [key]에 해당하는 member중 score가 min max 범위 안에 있는 member 목록 가져오기 :: [offset] 만큼 건너뛰고 [count] 만큼 가져오기
+
+---
 
 ### SORT
 
@@ -103,3 +123,15 @@
 | bad  | Bad Book  | 1930 |
 | ok   | OK Book   | 1940 |
 | good | Good Book | 1950 |
+
+---
+
+### HyperLogLog
+
+> Set에 비해 차지하는 메모리가 적어서 간단한 용도로 쓸때 좋다 <br>
+> 리턴값이 부정확할 확률이 0.81% 퍼센트가 있을
+
+- PFADD [key] [value] :: key에 value가 없으면 return 1 있으면 return 0
+- PFCOUNT [key] :: 등록된 value의 갯수
+
+---
