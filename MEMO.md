@@ -7,6 +7,7 @@
 - [Sorted Set](#sorted-set)
 - [Sort](#sort)
 - [HyperLogLog](#hyperloglog)
+- [List](#list)
 
 ---
 
@@ -101,7 +102,7 @@
 - SORT [key] LIMIT [offset] [count] ALPHA :: [offset] 만큼 건너띄고 [count] 만큼 가져옴
 - SORT books:likes BY books:\* -> year :: ['bad', 'ok', 'good'] :: \*에 SortedSet의 맴버를 바인딩해서 검색 한 해쉬의 year로 정렬한다
 - SORT books:likes BY books:\* -> year GET books:\*->title :: ['Bad Book', 'OK book', 'Good Book']
-- SORT books:likes BY [nosort] [DESC|ASC] GET # :: 정렬을 안해도 된다. 사용이유는 그냥 데이터 조인만 하고 시을 경우
+- SORT books:likes BY nosort [DESC|ASC] GET books:\*->title :: 정렬을 안해도 된다. 사용이유는 그냥 데이터 조인만 하고 싶을 경우
 
 > 테스트 데이터 Hash : Sorted Set
 
@@ -135,3 +136,24 @@
 - PFCOUNT [key] :: 등록된 value의 갯수
 
 ---
+
+### List
+
+> List는 배열이 아닌 링크드리스트 이다
+
+- LPUSH [key] [value] :: return count
+- RPUSH [key] [value] :: return count
+- LLEN [key] :: return count
+- LINDEX [key] [index] :: return key[index]
+- LRANGE [key] [startIdx] [endIdx] :: 인덱스 범위까지 가져옴
+- LPOS [key] [targetValue] :: 해당하는 인덱스를 리턴함 없을 경우 null
+- LPOS [key] [targetValue] RANK [offset] :: targetValue의 offset 번째 인덱스를 리턴
+- LPOS [key] [targetValue] COUNT [count] :: targetValuefmf count만큼 찾아서 인덱스 배열을 리턴
+- LPOS [key] [targetValue] MAXLEN [len] :: 첫번째부터 len까지만 검색해서 targetValue를 찾도록 함
+- LPOP [key] :: 첫번째 노드를 리턴하고 삭제
+- RPOP [key] :: 마지막 노드를 리턴하고 삭제
+- LSET [key] [idx] [value] :: idx에 해당하는 값을 value로 바꿈
+- LTRIM [key] [startIdx] [endIdx] :: startIdx ~ endIdx를 제외하고 다 삭제
+- LINSERT [key] BEFORE [targetValue] [insertValue] :: targetValue의 인덱스 바로 전에 insertValue를 넣는다
+- LINSERT [key] AFTER [targetValue] [insertValue] :: targetValue의 인덱스 바로 뒤에 insertValue를 넣는다
+- LREM [key] [startIdx] [targetValue] :: startIdx부터 서치하여 targetValue들을 전부 지운다 :: idx가 음수일경우 역순으로 조사함
