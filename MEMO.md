@@ -8,6 +8,7 @@
 - [Sort](#sort)
 - [HyperLogLog](#hyperloglog)
 - [List](#list)
+- [Transition](#transition)
 
 ---
 
@@ -157,3 +158,8 @@
 - LINSERT [key] BEFORE [targetValue] [insertValue] :: targetValue의 인덱스 바로 전에 insertValue를 넣는다
 - LINSERT [key] AFTER [targetValue] [insertValue] :: targetValue의 인덱스 바로 뒤에 insertValue를 넣는다
 - LREM [key] [startIdx] [targetValue] :: startIdx부터 서치하여 targetValue들을 전부 지운다 :: idx가 음수일경우 역순으로 조사함
+
+### Transition
+
+- MULTI [...action] EXEC
+- WATCH [key] MULTI [...action] EXEC :: key에 해당하는 값이 변경이 되면 트랜잭션만 실패하게 된다 실패시 Return null
