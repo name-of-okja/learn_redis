@@ -9,6 +9,7 @@
 - [HyperLogLog](#hyperloglog)
 - [List](#list)
 - [Transition](#transition)
+- [Concurrency](#cuncurrency)
 
 ---
 
@@ -159,7 +160,27 @@
 - LINSERT [key] AFTER [targetValue] [insertValue] :: targetValue의 인덱스 바로 뒤에 insertValue를 넣는다
 - LREM [key] [startIdx] [targetValue] :: startIdx부터 서치하여 targetValue들을 전부 지운다 :: idx가 음수일경우 역순으로 조사함
 
+---
+
 ### Transition
 
 - MULTI [...action] EXEC
 - WATCH [key] MULTI [...action] EXEC :: key에 해당하는 값이 변경이 되면 트랜잭션만 실패하게 된다 실패시 Return null
+
+---
+
+### Concurrency
+
+- A 프로세스의 락의 만료 된 후 B 프로세스가 락을 잡고 A 프로세스가 락을 해제 할 때
+  B 프로세스의 락을 삭제 하기 때문에 자기 자신이 잡인 락인지 확인을 위해 토큰 값을 부여
+
+```lua
+if GET(KEYS[1]) == ARGV[1] then
+  DEL(KEYS[1])
+end
+```
+
+- Lock을 잡고 실행하는 프로세스가 PX 보다 길 경우
+  프로세스가 끝나기 전에 다른 프로세스가 Lock을 잡을 수 있다.
+  > > PX 시간이 지났는지를 체크 하는 객체를 이용
+  > > 혹은 Redis Client 를 Proxy 객체로 감싸서 Expired 체크
