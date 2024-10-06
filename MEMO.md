@@ -10,6 +10,7 @@
 - [List](#list)
 - [Transition](#transition)
 - [Concurrency](#cuncurrency)
+- [RedisSearch](#redissearch)
 
 ---
 
@@ -184,3 +185,24 @@ end
   프로세스가 끝나기 전에 다른 프로세스가 Lock을 잡을 수 있다.
   > > PX 시간이 지났는지를 체크 하는 객체를 이용
   > > 혹은 Redis Client 를 Proxy 객체로 감싸서 Expired 체크
+
+### RedisSearch
+
+    - 데이터
+    HSET cars#a1 name 'car' color 'blue' year 1960
+    HSET cars#b1 name 'old car' color 'blue' year 1940
+    HSET cars#c3 name 'fast car' color 'black' year 1980
+    - 인덱스 생성
+    FT.CREATE idx:cars ON HASH PREFIX 1 cars#
+      SCHEMA name TEXT year NUMERIC color TAG
+    - 서치
+    FT.SEARCH idx:cars '@name:(fast car)'
+    FT.SEARCH idx:cars '@color:{blue}'
+    FT.SEARCH idx:cars '@year:[1955 1980]'
+
+- 인덱스 타입: NUMERIC, GEO, VECTOR, TAG, TEXT
+- 퍼지검색 : FT.SEARCH idx:cars '@name: (%car%)' :: % 하나당 오탈자 1개 있어도 조회됨 > %는 3개까지 가능
+- 접두사검색 : FT.SEARCH idx:Cars '@name: (fa\*)' :: startWith 와 같음. 대신 2글자 이상 이여야 함
+- FT.\_LIST : 존재하는 인덱스 목록
+- FT.EXPLANINCLI idx:items 'query' :: 매칭 되는 문자열 조회 (검증용)
+- FT.PROFILE idx.items SEARCH QUERY 'query' LIMIT 0 0 :: 성능 조회
