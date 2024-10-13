@@ -11,6 +11,7 @@
 - [Transition](#transition)
 - [Concurrency](#cuncurrency)
 - [RedisSearch](#redissearch)
+- [Stream](#stream)
 
 ---
 
@@ -206,3 +207,22 @@ end
 - FT.\_LIST : 존재하는 인덱스 목록
 - FT.EXPLANINCLI idx:items 'query' :: 매칭 되는 문자열 조회 (검증용)
 - FT.PROFILE idx.items SEARCH QUERY 'query' LIMIT 0 0 :: 성능 조회
+
+### Stream
+
+- XADD [key] * [keyOfValue] [value] [keyOfValue] [value] :: 스트림 추가 *는 Redis가 ID 생성 하도록 함 (UnixTime으로 자동 생성)
+- XREAD STREAMS [key] [unixTime]-[number] :: UnixTime 이후에 모든 스트림 읽기 :: Number는 동일한 유닉스 타임에 대한 순번
+- XREAD COUNT [count] STREAMS [key] [unixTime]-[number]
+- XREAD BLOCK [ms] STREAMS [key] [unixTime]-[number] :: ms 동안 데이터가 들어오면 리턴해줌
+- XREAD COUNT [count] BLOCK [ms] STREAMS [key] [unixTime]-[number] :: Count 만큼 데이터가 안쌓여도 하나라도 생기면 즉시 반환하는 특성이 있음
+- XREAD COUNT [count] BLOCK [ms] STREAMS [key] $ :: $가 READ된 UnixTime으로 변환하면서 다시 XREAD를 실행함 즉. 카운트 만큼 다 읽을 수 있음
+
+- XRANGE [key] [startUnixTime]-[number] [endUnixTime]-[number] COUNT [count] :: endUnixTime-Number에 + 를 사용하면 최댓값이 된다. 반대로 - 를 사용하면 최솟값이 됨
+
+- XGROUP CREATE [key] [groupKey] $ MKSTREAM :: $에 id를 입력해서 지정한 id 부터 스트림 할 수 있다
+- XGROUP CREATECONSUMER [key] [groupKey] [consumerKey]
+- XINFO GROUPS [key] :: 컨슈머 그룹 목록을 보여줌
+- XINFO CONSUMERS [key] [groupKey] :: 컨슈머에 디테일한 정보를 보여줌
+- XREADGROUP GROUP [groupKey] COUNT [count] STREAMS [key] > :: > 는 id로 지정 할 수 있다. > 기호는 수신되지 않은 걸 다 가져온다는 뜻
+- XACK [key] [groupKey] [id] :: 제대로 수신이 완료되었다고 전송함
+- XAUTOCLAIM [key] [groupKey] [newReciveConsumerKey] [timeoutMs] [id]-[number] :: ACK 답변이 없는 메세지들 중 timeoutMs 만큼 지난 메세지들을 group 에 있는 다른 곳으로 전송
